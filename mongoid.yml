@@ -1,0 +1,16 @@
+development:
+  clients:
+    default:
+      database: mongo_dev
+      hosts: 
+        - localhost:27017
+staging:
+  clients:
+    default:
+      database: mongo_staging
+      hosts: 
+        - mongodb:27017
+production:
+  clients:
+    default:
+      uri: <%= ENV['MONGO_URI'] %>

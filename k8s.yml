@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-mongo-ruby
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kube-mongo-ruby
+  template:
+    metadata:
+      labels:
+        app: kube-mongo-ruby
+    spec:
+      containers:
+      - image: registry.cloud.okteto.net/lecid/kube-mongo-ruby:1.1
+        name: ruby-app
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        env:
+        - name: RACK_ENV
+          value: production
+        - name: MONGO_URI
+          valueFrom: 
+            secretKeyRef:
+              name: mongosecret
+              key: mongo_uri
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-mongo-ruby
+  annotations:
+    dev.okteto.com/auto-ingress: "true"
+spec:
+  type: ClusterIP  
+  ports:
+  - name: "kube-mongo-ruby"
+    port: 8080
+  selector:
+    app: kube-mongo-ruby
