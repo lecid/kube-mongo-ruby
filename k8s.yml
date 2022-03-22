@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: kube-mongo-ruby
 spec:
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels:
       app: kube-mongo-ruby
