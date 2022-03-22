@@ -1,0 +1,26 @@
+# File: .github/workflows/workflow.yml
+on: [push]
+
+name: deploy okteto lecid
+
+jobs:
+
+  devflow:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@master
+      
+    - uses: okteto/login@master
+      with:
+        token: ${{ secrets.OKTETO_TOKEN }}
+    
+    - name: "Activate personal namespace"
+      uses: okteto/namespace@master
+      with:
+        name: lecid
+
+    - name: "Create deployment"
+      uses: okteto/apply@master
+      with:
+        manifest: k8s.yml
