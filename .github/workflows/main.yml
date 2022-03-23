@@ -14,7 +14,7 @@ jobs:
     - uses: okteto/context@latest
       with:
         token: ${{ secrets.OKTETO_TOKEN }}
-	namespace: lecid
+        namespace: lecid
       
     - name: "Build"
       uses: okteto/build@latest
