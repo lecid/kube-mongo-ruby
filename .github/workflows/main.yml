@@ -11,10 +11,15 @@ jobs:
     - name: checkout
       uses: actions/checkout@master
 
-    - uses: okteto/context@latest
+
+    - uses: okteto/login@master
       with:
         token: ${{ secrets.OKTETO_TOKEN }}
-        namespace: lecid
+
+#    - uses: okteto/context@latest
+#      with:
+#        token: ${{ secrets.OKTETO_TOKEN }}
+#        namespace: lecid
       
     - name: "Build"
       uses: okteto/build@latest
@@ -28,15 +33,11 @@ jobs:
       with:
         input: k8s.template
         output: k8s.yml
-
-#    - uses: okteto/login@master
-#      with:
-#        token: ${{ secrets.OKTETO_TOKEN }}
     
     - name: "Activate personal namespace"
       uses: okteto/namespace@master
       with:
-        name: lecid
+        namespace: lecid
 
     - name: "Create deployment"
       uses: okteto/apply@master
