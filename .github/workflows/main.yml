@@ -29,6 +29,9 @@ jobs:
         input: k8s.template
         output: k8s.yml
 
+    - name: clean context after build
+      run: rm -rf /github/home/.okteto
+
     - uses: okteto/login@master
       with:
         token: ${{ secrets.OKTETO_TOKEN }}
