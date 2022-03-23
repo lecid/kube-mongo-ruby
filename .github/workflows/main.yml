@@ -10,7 +10,24 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@master
+
+    - uses: okteto/context@latest
+      with:
+        token: ${{ secrets.OKTETO_TOKEN }}
       
+    - name: "Build"
+      uses: okteto/build@latest
+      with:
+        tag: registry.cloud.okteto.net/lecid/kube-mongo-ruby:${{ github.sha }}
+
+    - uses: danielr1996/envsubst-action@1.0.0
+      env:
+	VERSION: ${{ github.sha }}
+      	REPLICAS: 3
+      with:
+        input: k8s.template
+        output: k8s.yml
+
     - uses: okteto/login@master
       with:
         token: ${{ secrets.OKTETO_TOKEN }}
