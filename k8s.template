@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: kube-mongo-ruby
 spec:
-  replicas: ${REPLICAS}
+  replicas: ${APP_REPLICAS}
   selector:
     matchLabels:
       app: kube-mongo-ruby
@@ -13,7 +13,7 @@ spec:
         app: kube-mongo-ruby
     spec:
       containers:
-      - image: registry.cloud.okteto.net/lecid/kube-mongo-ruby:${VERSION}
+      - image: registry.cloud.okteto.net/lecid/kube-mongo-ruby:${APP_VERSION}
         name: ruby-app
         livenessProbe:
           httpGet:
