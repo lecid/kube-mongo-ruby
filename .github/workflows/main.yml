@@ -15,10 +15,8 @@ jobs:
         run: |
           okteto login --token ${{ secrets.OKTETO_TOKEN }}
           okteto build --progress plain -t registry.cloud.okteto.net/lecid/kube-mongo-ruby:${{ github.sha }} -f Dockerfile .
-          export APP_VERSION=${{ github.sha }}
-          export APP_REPLICAS= 3
-          apk add envsubst
-          envsubst < k8s.template > k8s.yml
+          apk add envsubst  
+          APP_VERSION=${{ github.sha }} APP_REPLICAS= 3 envsubst < k8s.template > k8s.yml
           okteto namespace lecid
           okteto kubeconfig
           kubectl apply -f k8s.yml
