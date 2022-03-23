@@ -29,9 +29,9 @@ jobs:
         input: k8s.template
         output: k8s.yml
 
-    - uses: okteto/login@master
-      with:
-        token: ${{ secrets.OKTETO_TOKEN }}
+#    - uses: okteto/login@master
+#      with:
+#        token: ${{ secrets.OKTETO_TOKEN }}
     
     - name: "Activate personal namespace"
       uses: okteto/namespace@master
