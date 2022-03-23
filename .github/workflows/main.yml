@@ -28,7 +28,7 @@ jobs:
       with:
         input: k8s.template
         output: k8s.yml
-	
+
     - uses: okteto/login@master
       with:
         token: ${{ secrets.OKTETO_TOKEN }}
