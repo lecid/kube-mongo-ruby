@@ -33,3 +33,7 @@ end
 get '/' do
   "Hello world, %d"%Tmp.count
   end
+
+get '/hello' do
+  "Bonjour"
+end
