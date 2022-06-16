@@ -29,7 +29,7 @@ namespace :prepare do
     desc 'Load development requiste (mongo, bundling), need docker'
     task :development do 
         system "bundle install"
-        system "docker pull bitnami/mongdb:latest"
+        system "docker pull bitnami/mongodb:latest"
         system "docker run --rm -d  -p 27017:27017/tcp bitnami/mongodb:latest"
     end
 end
