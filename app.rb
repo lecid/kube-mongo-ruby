@@ -24,6 +24,11 @@ data_startup.each do |arecord|
   Tmp.create! arecord unless Tmp.where(name: arecord[:name]).exists?
 end
 
+
+get '/update' do
+  "test"
+end
+
 get '/test.json' do
   content_type :json
   allTmp = Tmp.all
