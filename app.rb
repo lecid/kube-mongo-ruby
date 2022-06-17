@@ -40,5 +40,5 @@ get '/' do
   end
 
 get '/hello' do
-  "Bonjour"
+  "Bonjour la tribu"
 end
