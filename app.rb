@@ -26,7 +26,7 @@ end
 
 
 get '/update' do
-  "test"
+  "test 2"
 end
 
 get '/test.json' do
