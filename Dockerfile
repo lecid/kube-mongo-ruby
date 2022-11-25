@@ -1,4 +1,6 @@
-FROM ruby:2.7
+FROM ruby:3.0.2
+
+#ENV http_proxy='http://172.17.0.1:3129'
 WORKDIR /code
 COPY . /code
 RUN bundle install
