@@ -1,0 +1,90 @@
+version: '3.7'
+
+services:
+  mongodb:
+    image: bitnami/mongodb:latest
+    networks:
+      - traefik-net
+  myapp:
+    ports:
+      - target: 8080
+        published: 9292
+        mode: host
+    image: app:latest
+    networks:
+      - traefik-net
+    environment:
+      - RACK_ENV=staging
+    deploy:
+      labels: 
+      - traefik.enable=true
+      - traefik.http.routers.myapp.rule=Host(`app.localhost`)
+      - traefik.http.services.myapp.loadbalancer.server.port=8080
+      - traefik.http.routers.myapp.entrypoints=web
+
+
+
+      
+
+   
+  traefik:
+    image: traefik:latest
+    ports:
+      - target: 80
+        published: 80
+        mode: host
+      - target: 8080
+        published: 8080
+        mode: host
+    networks:
+      - traefik-net
+    command:
+      - --providers.docker
+      - --api.insecure=true
+      - --api.dashboard=true 
+      - --providers.docker.network=traefik-net
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.swarmMode=true
+      - --entrypoints.web.address=:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.traefik.rule=Host(`dashboard.localhost`)
+        - traefik.http.services.traefik.loadbalancer.server.port=8080
+        - traefik.http.routers.traefik.entrypoints=web
+
+
+
+        
+
+  portal:
+    image: nginx
+    networks:
+      - traefik-net
+    configs:
+      - source: index
+        target: /usr/share/nginx/html/index.html
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.portal.entrypoints=web
+        - traefik.http.routers.portal.rule=Host(`portal.localhost`)
+        - traefik.http.services.portal.loadbalancer.server.port=80
+
+
+
+configs:
+  index:
+    file: ./index.html
+
+
+networks:
+  backend:
+    driver: overlay
+  traefik-net:
+    driver: overlay

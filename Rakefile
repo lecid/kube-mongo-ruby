@@ -32,7 +32,15 @@ namespace :prepare do
         system "docker pull bitnami/mongodb:latest"
         system "docker run --rm -d  -p 27017:27017/tcp bitnami/mongodb:latest"
     end
+
+    desc 'build container app:latest' 
+    task :build do 
+      system 'docker build --tag app:latest .'
+    end
+    
 end
+
+
 
 namespace :run do 
     desc 'run locally'
@@ -45,6 +53,11 @@ namespace :deploy do
     desc "deploy local staging (need docker compose)"
     task :staging do 
         system "docker-compose up -d"
+    end
+
+    desc "deploy local swarm ( Container app:latest must be build)"
+    task :swarm do
+      system "docker stack deploy -c docker-compose-swarm.yml app"
     end
     desc 'Deploy prod (need kubectl, require a mongodb Charts,StatefullSet or external, need Secret : run rake secret:init before), '
     task :prod do 
