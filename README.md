@@ -1,9 +1,6 @@
 # kube-mongo-ruby
 Sample Kubernetes (Okteto) application with ruby and mongodb charts
 
-
-
-
 ## Run it locally in dev
 
 ### Needs
