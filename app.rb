@@ -36,7 +36,7 @@ get '/test.json' do
 end
 
 get '/' do
-  "Hello world, %d"%Tmp.count
+  "Hello pierre, %d"%Tmp.count
   end
 
 get '/hello' do
