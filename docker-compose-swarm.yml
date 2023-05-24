@@ -6,11 +6,7 @@ services:
     networks:
       - traefik-net
   myapp:
-    ports:
-      - target: 8080
-        published: 9292
-        mode: host
-    image: app:latest
+    image: app:olivier
     networks:
       - traefik-net
     environment:
@@ -30,12 +26,14 @@ services:
   traefik:
     image: traefik:latest
     ports:
+
       - target: 80
         published: 80
         mode: host
-      - target: 8080
-        published: 8080
-        mode: host
+      - 8080:8080
+      # - target: 8080
+      #   published: 8080
+      #   mode: host
     networks:
       - traefik-net
     command:
@@ -70,6 +68,7 @@ services:
       - source: index
         target: /usr/share/nginx/html/index.html
     deploy:
+      replicas: 6
       labels:
         - traefik.enable=true
         - traefik.http.routers.portal.entrypoints=web
