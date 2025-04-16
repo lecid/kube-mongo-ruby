@@ -10,7 +10,21 @@ staging:
       database: mongo_staging
       hosts: 
         - mongodb:27017
+
+test:
+  clients:
+    default:
+      database: mongo_test
+      hosts:
+        - mongodb:27017
+
 production:
   clients:
     default:
-      uri: <%= ENV['MONGO_URI'] %>
+      database: <%= ENV['MONGO_DATABASE'] %>
+      hosts:
+        - mongodb:27017
+      options:
+        user: <%= ENV['MONGO_USER'] %>
+        password: <%= ENV['MONGO_PASSWORD'] %>
+        auth_source: admin

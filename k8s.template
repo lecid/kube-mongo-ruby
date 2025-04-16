@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: kube-mongo-ruby
 spec:
-  replicas: ${APP_REPLICAS}
+  replicas: <APP_REPLICAS>
   selector:
     matchLabels:
       app: kube-mongo-ruby
@@ -13,7 +13,7 @@ spec:
         app: kube-mongo-ruby
     spec:
       containers:
-      - image: registry.cloud.okteto.net/lecid/kube-mongo-ruby:${APP_VERSION}
+      - image: <APP_NAME>:<APP_VERSION>
         name: ruby-app
         livenessProbe:
           httpGet:
@@ -30,11 +30,23 @@ spec:
         env:
         - name: RACK_ENV
           value: production
-        - name: MONGO_URI
+        - name: MONGO_DATABASE
           valueFrom: 
             secretKeyRef:
               name: mongosecret
-              key: mongo_uri
+              key: mongo_database
+        - name: MONGO_USER
+          valueFrom: 
+            secretKeyRef:
+              name: mongosecret
+              key: mongo_user
+        - name: MONGO_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: mongosecret
+              key: mongo_password
+
+
 
 ---
 
@@ -42,12 +54,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kube-mongo-ruby
-  annotations:
-    dev.okteto.com/auto-ingress: "true"
 spec:
-  type: ClusterIP  
+  type: NodePort
   ports:
   - name: "kube-mongo-ruby"
     port: 8080
+    targetPort: 8080
+    nodePort: 30000
   selector:
     app: kube-mongo-ruby

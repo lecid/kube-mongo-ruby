@@ -1,0 +1,6 @@
+services:
+  mongodb_dev:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+

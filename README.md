@@ -10,13 +10,22 @@ Sample Kubernetes (Okteto) application with ruby and mongodb charts
 ### Commands
 
     $ rake prepare:development
+    $ rake prepare:mongo_dev
     $ rake run:local
+
+ctrl + C to stop
+
+    $ rake clean:mongo_dev
+
+
+
 
 ### Objectives
 
 - bundle install for dependencies
 - docker pull mongodb
-- docker run interactive mongodb
+- docker run dev insatnce mongodb
+- run app in dev
 
 ## Deploy it in staging : as a Docker Service (Compose)
 
@@ -24,19 +33,62 @@ Sample Kubernetes (Okteto) application with ruby and mongodb charts
 
     $ rake deploy:staging
 
+
+    $ rake undeploy:staging 
+
 ### Objectives
 
-- docker-compose up -d
+- build in compose
+- docker-compose up -d --build
+- without ingress
+- run app in staging
 
 
-## Deploy on Okteto as a Kubernetes manifest
+## Deploy on Docker Swarm as a stack compose 
 
 ### Needs
 
-- Okteto account (Dev)
-- A Mongodb Helm Charts with corresponding credentials
+- docker swarm init on the host 
 
 ### Commands
 
-    $ rake secret:init
-    $ rake deploy:prod 
+    $ rake prepare:registry
+    $ rake build:push 
+    $ rake deploy:staging
+
+
+    $ rake undeploy:staging
+    $ rake clean:registry
+
+### Objectives
+
+- pull from local registry 
+- docker stack deploy
+- with Treafik ingress
+- run app in test
+
+
+## Deploy on Kubernetes as a manifest
+
+### Needs
+
+- kubernetes cluster or minikube, rancher, etc ..;
+
+### Commands
+
+    $ rake prepare:registry
+    $ rake mongo:kube:secret
+    $ rake mongo:kube:deploy
+    $ rake build:push 
+    $ rake deploy:kubernetes
+
+
+    $ rake undeploy:kubernetes
+    $ rake clean:registry
+
+### Objectives
+
+- prepare secret for credentials
+- load mongodb local backend 
+- pull from local registry 
+- deploy on kubernetes

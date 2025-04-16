@@ -1,44 +1,43 @@
 require 'sinatra'
 require 'mongoid'
 require 'json'
+require 'erb'
 
 environment  = (ENV['RACK_ENV'])? ENV['RACK_ENV'].to_sym : :development
 
 Mongoid.load!("mongoid.yml", environment )
 
-class Tmp
+class Blog
   include Mongoid::Document
-  field :name, type: String
-  field :num, type: Integer
-  field :val, type: Integer
+  field :title, type: String
+  field :content, type: String
+  field :created_at, type: Time, default: ->{ Time.now }
 end 
 
 data_startup = [
-  {name: 'one', num: 1, val: 10},
-  {name: 'two', num: 2, val: 40},
-  {name: 'three', num: 3, val: 30},
-  {name: 'four', num: 4, val: 50},
-  {name: 'five', num: 5, val: 20}] 
+  {title: 'Premier Post', content: "Bienvenue sur le Blog"},
+  {title: 'Deuxième post', content: " un autre post super"}
+]
 
 data_startup.each do |arecord|
-  Tmp.create! arecord unless Tmp.where(name: arecord[:name]).exists?
-end
-
-
-get '/update' do
-  "test 2"
-end
-
-get '/test.json' do
-  content_type :json
-  allTmp = Tmp.all
-  allTmp.to_json
+  Blog.create! arecord unless Blog.where(title: arecord[:title]).exists?
 end
 
 get '/' do
-  "Hello pierre, %d"%Tmp.count
-  end
-
-get '/hello' do
-  "Bonjour la tribu"
+  @posts = Blog.all
+  erb :index
 end
+
+post '/add' do
+  Blog.create! title: params[:title], content: params[:content]
+  redirect '/'
+end
+
+
+
+get '/content.json' do
+  content_type :json
+  Blog.all.to_json
+
+end
+

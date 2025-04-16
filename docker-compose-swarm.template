@@ -26,14 +26,14 @@ services:
           - node.role == manager
 
   kube-mongo-ruby:
-    image: localhost:5000/kube-mongo-ruby:latest
+    image: <APP_NAME>:<APP_VERSION>
     networks:
       - traefik-net
-#      - backend
+      - backend
     environment:
       - RACK_ENV=test
     deploy:
-#      replicas: 2
+      replicas: <APP_REPLICAS>
       placement:
         constraints:
           - node.role == manager
@@ -47,8 +47,7 @@ services:
   mongodb:
     image: mongo:latest
     networks:
-#      - backend
-      - traefik-net
+      - backend
 
 
 
@@ -57,6 +56,6 @@ networks:
     driver: overlay
     name: traefik-net
     attachable: true
-#  backend:
-#    driver: overlay
-#    name: backend
+  backend:
+    driver: overlay
+    name: backend
